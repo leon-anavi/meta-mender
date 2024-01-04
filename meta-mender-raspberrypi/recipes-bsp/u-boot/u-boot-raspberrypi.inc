@@ -12,3 +12,6 @@ SRC_URI:append:rpi:mender-uboot = "${@bb.utils.contains('MENDER_UBOOT_AUTO_CONFI
                                                         ' file://0001-configs-rpi-enable-mender-requirements.patch \
                                                         ', \
                                                         d)}"
+
+SRC_URI:remove:raspberrypi5:mender-uboot = "file://0001-configs-rpi-enable-mender-requirements.patch"
+SRC_URI:append:raspberrypi5:mender-uboot = " file://0001-configs-rpi5-enable-mender-requirements.patch"

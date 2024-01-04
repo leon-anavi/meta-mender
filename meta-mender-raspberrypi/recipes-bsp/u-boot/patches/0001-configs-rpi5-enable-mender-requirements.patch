@@ -1,0 +1,69 @@
+From f1aae7cd2cc46ec9da1c24d07f0882e13528c9a0 Mon Sep 17 00:00:00 2001
+From: Leon Anavi <leon.anavi@konsulko.com>
+Date: Thu, 4 Jan 2024 12:00:27 +0000
+Subject: [PATCH] configs: rpi5: enable mender requirements
+
+Which are CONFIG_BOOTCOUNT_ENV and CONFIG_BOOTCOUNT_LIMIT.
+
+Mender also requires that the environment is on MMC
+(CONFIG_ENV_IS_IN_MMC)
+
+Signed-off-by: Mirza Krak <mirza.krak@gmail.com>
+Signed-off-by: Drew Moseley <drew.moseley@northern.tech>
+Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
+---
+ configs/rpi_5_arm64_defconfig | 5 ++++-
+ env/Kconfig                   | 1 -
+ include/configs/rpi.h         | 3 +++
+ 3 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/configs/rpi_5_arm64_defconfig b/configs/rpi_5_arm64_defconfig
+index 07b5387d1e..cbeff48c31 100644
+--- a/configs/rpi_5_arm64_defconfig
++++ b/configs/rpi_5_arm64_defconfig
+@@ -7,6 +7,10 @@ CONFIG_CUSTOM_SYS_INIT_SP_ADDR=0x7fffe30
+ CONFIG_ENV_SIZE=0x4000
+ CONFIG_DEFAULT_DEVICE_TREE="bcm2712-rpi-5-b"
+ CONFIG_OF_LIBFDT_OVERLAY=y
++CONFIG_ENV_IS_IN_MMC=y
++CONFIG_ENV_OFFSET=0x800000
++CONFIG_ENV_OFFSET_REDUND=0x1000000
++CONFIG_SYS_REDUNDAND_ENVIRONMENT=y
+ CONFIG_DM_RESET=y
+ CONFIG_SYS_LOAD_ADDR=0x1000000
+ CONFIG_PCI=y
+@@ -25,7 +29,6 @@ CONFIG_CMD_MMC=y
+ CONFIG_CMD_PCI=y
+ CONFIG_CMD_USB=y
+ CONFIG_CMD_FS_UUID=y
+-CONFIG_ENV_FAT_DEVICE_AND_PART="0:1"
+ CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG=y
+ CONFIG_TFTP_TSIZE=y
+ CONFIG_DM_DMA=y
+diff --git a/env/Kconfig b/env/Kconfig
+index f5f0969233..68d7569755 100644
+--- a/env/Kconfig
++++ b/env/Kconfig
+@@ -96,7 +96,6 @@ config ENV_IS_IN_EEPROM
+ config ENV_IS_IN_FAT
+ 	bool "Environment is in a FAT filesystem"
+ 	depends on !CHAIN_OF_TRUST
+-	default y if ARCH_BCM283X
+ 	default y if ARCH_SUNXI && MMC
+ 	default y if MMC_OMAP_HS && TI_COMMON_CMD_OPTIONS
+ 	select FS_FAT
+diff --git a/include/configs/rpi.h b/include/configs/rpi.h
+index 8e56bdc84a..86c7341d54 100644
+--- a/include/configs/rpi.h
++++ b/include/configs/rpi.h
+@@ -31,4 +31,7 @@
+  */
+ #define CFG_SYS_SDRAM_SIZE		SZ_128M
+ 
++#define CONFIG_BOOTCOUNT_ENV
++#define CONFIG_BOOTCOUNT_LIMIT
++
+ #endif
+-- 
+2.39.2
+
